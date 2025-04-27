@@ -1,7 +1,10 @@
-
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Display from './Display';
 import Button from './Button';
+import { Button as UIButton } from '@/components/ui/button';
+import { Home } from 'lucide-react';
+import { v4 as uuidv4 } from '@/lib/utils';
 
 const Calculator = () => {
   const [display, setDisplay] = useState('0');
@@ -88,8 +91,28 @@ const Calculator = () => {
     }
   };
 
+  const saveEquation = () => {
+    const equations = JSON.parse(localStorage.getItem('savedEquations') || '[]');
+    const newEquation = {
+      id: uuidv4(),
+      name: `Equation ${equations.length + 1}`,
+      equation: `${previousValue} ${operation} ${display}`,
+      result: display
+    };
+    localStorage.setItem('savedEquations', JSON.stringify([...equations, newEquation]));
+  };
+
   return (
     <div className="max-w-md mx-auto p-4 space-y-4">
+      <div className="flex justify-end mb-4">
+        <Link to="/saved">
+          <UIButton variant="outline">
+            <Home className="mr-2" />
+            Saved Equations
+          </UIButton>
+        </Link>
+      </div>
+      
       <Display value={display} memory={memory} />
       
       <div className="grid grid-cols-4 gap-2">
@@ -133,6 +156,7 @@ const Calculator = () => {
 
         <Button onClick={() => inputDigit('0')} className="col-span-2">0</Button>
         <Button onClick={inputDecimal}>.</Button>
+        <Button variant="accent" onClick={saveEquation}>Save</Button>
       </div>
     </div>
   );
