@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Home, Pencil, TrashIcon } from "lucide-react";
+import { Home, Pencil, TrashIcon, Play } from "lucide-react";
 
 interface SavedEquation {
   id: string;
@@ -17,6 +17,7 @@ const SavedEquations = () => {
   const [equations, setEquations] = useState<SavedEquation[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  const navigate = useNavigate();
   
   useEffect(() => {
     const savedEquations = JSON.parse(localStorage.getItem('savedEquations') || '[]');
@@ -41,6 +42,11 @@ const SavedEquations = () => {
     const updatedEquations = equations.filter(eq => eq.id !== id);
     setEquations(updatedEquations);
     localStorage.setItem('savedEquations', JSON.stringify(updatedEquations));
+  };
+
+  const loadEquation = (equation: SavedEquation) => {
+    localStorage.setItem('currentEquation', equation.equation);
+    navigate('/');
   };
 
   return (
@@ -87,6 +93,13 @@ const SavedEquations = () => {
                     )}
                   </div>
                   <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => loadEquation(equation)}
+                    >
+                      <Play className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="outline"
                       size="icon"
