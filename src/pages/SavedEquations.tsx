@@ -1,11 +1,10 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Home, Pencil, TrashIcon } from "lucide-react";
-import { useState } from 'react';
 
 interface SavedEquation {
   id: string;
@@ -18,6 +17,11 @@ const SavedEquations = () => {
   const [equations, setEquations] = useState<SavedEquation[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  
+  useEffect(() => {
+    const savedEquations = JSON.parse(localStorage.getItem('savedEquations') || '[]');
+    setEquations(savedEquations);
+  }, []);
 
   const handleRename = (id: string, currentName: string) => {
     setEditingId(id);
@@ -25,14 +29,18 @@ const SavedEquations = () => {
   };
 
   const saveNewName = (id: string) => {
-    setEquations(equations.map(eq => 
+    const updatedEquations = equations.map(eq => 
       eq.id === id ? { ...eq, name: editName } : eq
-    ));
+    );
+    setEquations(updatedEquations);
+    localStorage.setItem('savedEquations', JSON.stringify(updatedEquations));
     setEditingId(null);
   };
 
   const deleteEquation = (id: string) => {
-    setEquations(equations.filter(eq => eq.id !== id));
+    const updatedEquations = equations.filter(eq => eq.id !== id);
+    setEquations(updatedEquations);
+    localStorage.setItem('savedEquations', JSON.stringify(updatedEquations));
   };
 
   return (

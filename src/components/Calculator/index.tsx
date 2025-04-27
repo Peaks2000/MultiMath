@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Display from './Display';
 import Button from './Button';
 import { Button as UIButton } from '@/components/ui/button';
 import { Home } from 'lucide-react';
-import { v4 as uuidv4 } from '@/lib/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 const Calculator = () => {
   const [display, setDisplay] = useState('0');
