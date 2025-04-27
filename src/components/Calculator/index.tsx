@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Display from './Display';
 import Button from './Button';
@@ -13,6 +13,26 @@ const Calculator = () => {
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
+
+  // Load saved equation if exists
+  useEffect(() => {
+    const savedEquation = localStorage.getItem('currentEquation');
+    if (savedEquation) {
+      // Parse the equation string like "5 + 3"
+      const parts = savedEquation.split(' ');
+      if (parts.length === 3) {
+        const firstNum = parseFloat(parts[0]);
+        const op = parts[1];
+        const secondNum = parseFloat(parts[2]);
+        
+        setPreviousValue(firstNum);
+        setOperation(op);
+        setDisplay(String(secondNum));
+      }
+      // Clear the saved equation after loading
+      localStorage.removeItem('currentEquation');
+    }
+  }, []);
 
   const clearAll = () => {
     setDisplay('0');
