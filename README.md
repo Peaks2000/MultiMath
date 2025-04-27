@@ -4,3 +4,6 @@ Features:
 Renaming and deleteing calculatons
 a cool save button
 a usable ui
+
+TODO:
+ios app 
