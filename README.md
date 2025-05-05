@@ -7,5 +7,6 @@ a usable ui
 
 TODO:
 ios app 
+a more streamlined saving system
 
 Yes i used ai to do bits of it(it fixed almost every error)
